@@ -5,8 +5,69 @@
     <meta name="description" content="Voronoi">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voronoi</title>
-    <script type="module" src="./index.js"></script>
 </head>
 <body>
+    <svg id="svg" width="400" height="400" viewBox="0 0 100 100">
+        <style>
+            text {
+                font-size: 4px;
+            }
+          </style>
+    </svg>
+
+    <script type="module">
+        import {Cell, Line, Point, Polygon, WeightedPoint} from "./core.js"
+        import * as powerDiagram from "./power-diagram.js"
+        
+        const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
+        const generators = [
+            new WeightedPoint(20, 10, 100),
+            new WeightedPoint(90, 10, 300),
+            new WeightedPoint(55, 90, 200),
+            new WeightedPoint(10, 90, 400),
+            new WeightedPoint(40, 55, 50),
+            new WeightedPoint(60, 50, 70),
+            new WeightedPoint(10, 50, 30),
+            new WeightedPoint(80, 80, 30),
+        ]
+        const cells = powerDiagram.calculate(boundPolygon, generators)
+
+        const colors = [
+            "blue",
+            "brown",
+            "coral",
+            "green",
+            "grey",
+            "orange",
+            "red",
+            "yellow",
+        ]
+
+        const svg = document.getElementById("svg")
+        cells.forEach((cell, index) => {
+            const points = cell.polygon.vertices
+            const color = colors[index % colors.length]
+            svg.appendChild(polygonElement(points, color, "white"))
+
+            const weightedPoint = generators[index]
+            svg.appendChild(textElement(weightedPoint.x, weightedPoint.y, weightedPoint.weight))
+        })
+
+        function polygonElement(points, fill = "none", stroke = "black") {
+            const element = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
+            element.setAttribute("points", points.map(v => `${v.x},${v.y}`).join(" "))
+            element.setAttribute("fill", fill)
+            element.setAttribute("stroke", stroke)
+            return element
+        }
+
+        function textElement(x, y, text) {
+            const element = document.createElementNS("http://www.w3.org/2000/svg", "text")
+            element.setAttribute("x", x)
+            element.setAttribute("y", y)
+            element.textContent = text
+            return element
+        }
+    </script>        
 </body>
 </html>
