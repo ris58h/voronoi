@@ -63,7 +63,7 @@ function divisionLine(g_i, g_j) {
         y2 = f_y(x2)
     }
 
-    return new Line(new Point(x1, y1), new Point(x2, y2));
+    return new Line(new Point(x1, y1), new Point(x2, y2))
 }
 
 function intersectionOfFacetAndLine(facet, line) {
@@ -166,13 +166,13 @@ function tooClose(p1, p2) {
 }
 
 function normalizedGenerators(generators) {
-    let minK = Float.MAX_VALUE
+    let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.size - 1; i++) {
         for (let j = i + 1; j < generators.size; j++) {
             let dist = generators[i].distanceTo(generators[j])
             let ws = pw[i] + pw[j]
-            if (Float.isInfinite(ws)) {//TODO
-                ws = Float.MAX_VALUE
+            if (!Number.isFinite(ws)) {
+                ws = Number.MAX_VALUE
             }
             let k = dist / ws
             minK = Math.min(minK, k)
