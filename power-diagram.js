@@ -6,7 +6,7 @@ export function calculate(boundPolygon, weightedPoints) {
         return []
     }
 
-    const generators = normalizedGenerators(weightedPoints)
+    const generators = normalizedGeneratorsWithRespectToDistances(weightedPoints)
     const cellBounds = Array(length).fill(boundPolygon)
     for (let i = 0; i < length - 1; i++) {
         for (let j = i + 1; j < length; j++) {
@@ -165,7 +165,7 @@ function tooClose(p1, p2) {
     return p1.distanceTo(p2) < EPS
 }
 
-function normalizedGenerators(generators) {
+function normalizedGeneratorsWithRespectToDistances(generators) {
     //TODO case with array of one element
     let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.length - 1; i++) {
