@@ -11,7 +11,7 @@ export class Point {
     }
 }
 
-export class Generator extends Point {
+export class WeightedPoint extends Point {
     constructor(x, y, weight) {
         super(x, y)
         this.weight = weight

@@ -1,12 +1,12 @@
-import {Cell, Generator, Line, Point, Polygon} from "./core.js"
+import {Cell, Line, Point, Polygon, WeightedPoint} from "./core.js"
 
-export function calculate(boundPolygon, weightedPoints) {
-    const length = weightedPoints.length
+export function calculate(boundPolygon, generators) {
+    const length = generators.length
     if (length == 0) {
         return []
     }
 
-    const generators = normalizedGeneratorsWithRespectToDistances(weightedPoints)
+    generators = normalizedGeneratorsWithRespectToDistances(generators)
     const cellBounds = Array(length).fill(boundPolygon)
     for (let i = 0; i < length - 1; i++) {
         for (let j = i + 1; j < length; j++) {
@@ -170,10 +170,8 @@ function normalizedGeneratorsWithRespectToDistances(generators) {
     let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.length - 1; i++) {
         for (let j = i + 1; j < generators.length; j++) {
-            const g_i = generators[i]
-            const g_j = generators[j]
-            let dist = g_i.distanceTo(g_j)
-            let ws = g_i.weight + g_j.weight
+            let dist = generators[i].distanceTo(generators[j])
+            let ws = generators[i].weight + generators[j].weight
             if (!Number.isFinite(ws)) {
                 ws = Number.MAX_VALUE
             }
@@ -182,5 +180,5 @@ function normalizedGeneratorsWithRespectToDistances(generators) {
         }
     }
 
-    return generators.map(generator => new Generator(generator.x, generator.y, generator.weight * minK))
+    return generators.map(generator => new WeightedPoint(generator.x, generator.y, generator.weight * minK))
 }
