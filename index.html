@@ -16,7 +16,7 @@
     </svg>
 
     <script type="module">
-        import {Cell, Line, Point, Polygon, WeightedPoint} from "./core.js"
+        import {Line, Point, Polygon, WeightedPoint} from "./core.js"
         import * as powerDiagram from "./power-diagram.js"
         
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
@@ -45,9 +45,7 @@
 
         const svg = document.getElementById("svg")
         cells.forEach((cell, index) => {
-            const points = cell.polygon.vertices
-            const color = colors[index % colors.length]
-            svg.appendChild(polygonElement(points, color, "white"))
+            svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length], "white"))
 
             const weightedPoint = generators[index]
             svg.appendChild(textElement(weightedPoint.x, weightedPoint.y, weightedPoint.weight))

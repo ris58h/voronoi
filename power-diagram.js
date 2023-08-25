@@ -1,4 +1,4 @@
-import {Cell, Line, Point, Polygon, WeightedPoint} from "./core.js"
+import {Line, Point, Polygon, WeightedPoint} from "./core.js"
 
 export function calculate(boundPolygon, generators) {
     const length = generators.length
@@ -15,12 +15,7 @@ export function calculate(boundPolygon, generators) {
             cellBounds[j] = cut(generators[j], cellBounds[j], divider)
         }
     }
-
-    const cells = []
-    for (let i = 0; i < length; i++) {
-        cells[i] = new Cell(generators[i], cellBounds[i])
-    }
-    return cells
+    return cellBounds
 }
 
 function divisionLine(g_i, g_j) {

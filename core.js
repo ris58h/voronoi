@@ -128,10 +128,3 @@ export class Polygon {
         }
     }
 }
-
-export class Cell {
-    constructor(generator, polygon) {
-        this.generator = generator
-        this.polygon = polygon
-    }
-}
