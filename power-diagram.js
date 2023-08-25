@@ -1,7 +1,7 @@
-import {Cell, Generator, Line, Point, Polygon} from "./core"
+import {Cell, Generator, Line, Point, Polygon} from "./core.js"
 
 export function calculate(boundPolygon, weightedPoints) {
-    const length = generators.size
+    const length = weightedPoints.length
     if (length == 0) {
         return []
     }
@@ -34,13 +34,13 @@ function divisionLine(g_i, g_j) {
     const dx = x_i - x_j
     const dy = y_i - y_j
     const bb = ((x_i * x_i - x_j * x_j) + (y_i * y_i - y_j * y_j) - (w_i * w_i - w_j * w_j)) / 2
-    function f_x() {
+    function f_x(y) {
         const k = -(dy / dx)
         const b = bb / dx
         const x = k * y + b
         return x
     }
-    function f_y() {
+    function f_y(x) {
         const k = -(dx / dy)
         const b = bb / dy
         const y = k * x + b
@@ -109,20 +109,21 @@ function intersection(l1, l2) {
 }
 
 function cut(generator, polygon, line) {
-    const newVertices = []
+    let newVertices = []
     polygon.processFacets((begin, end) => {
         if (notOnOppositeSides(generator, begin, line)) {
-            newVertices.add(begin)
+            newVertices.push(begin)
         }
         const facet = new Line(begin, end)
         const intersectionPoint = intersectionOfFacetAndLine(facet, line)
         if (intersectionPoint != null) {
-            newVertices.add(intersectionPoint)
+            newVertices.push(intersectionPoint)
         }
         return true
     })
-    reduceVertices(newVertices)
-    const newSize = newVertices.size()
+    //TODO do it earlier while processing facets
+    newVertices = reduceVertices(newVertices)
+    const newSize = newVertices.length
     if (newSize < 3) {
         throw `Illegal state`
     }
@@ -147,16 +148,15 @@ function notOnOppositeSides(p1, p2, l) {
 }
 
 function reduceVertices(points) {
+    const result = []
     let prev = null
-    const iterator = points[Symbol.iterator]()
-    let next
-    while (!(next = iterator.next()).done) {
-        const point = next.value
-        if (prev != null && tooClose(prev, point)) {
-            iterator.remove()
+    for (let point of points) {
+        if (prev == null || !tooClose(prev, point)) {
+            result.push(point)
         }
         prev = point
     }
+    return result
 }
 
 const EPS = 0.01
@@ -166,11 +166,14 @@ function tooClose(p1, p2) {
 }
 
 function normalizedGenerators(generators) {
+    //TODO case with array of one element
     let minK = Number.MAX_VALUE
-    for (let i = 0; i < generators.size - 1; i++) {
-        for (let j = i + 1; j < generators.size; j++) {
-            let dist = generators[i].distanceTo(generators[j])
-            let ws = pw[i] + pw[j]
+    for (let i = 0; i < generators.length - 1; i++) {
+        for (let j = i + 1; j < generators.length; j++) {
+            const g_i = generators[i]
+            const g_j = generators[j]
+            let dist = g_i.distanceTo(g_j)
+            let ws = g_i.weight + g_j.weight
             if (!Number.isFinite(ws)) {
                 ws = Number.MAX_VALUE
             }
@@ -179,7 +182,5 @@ function normalizedGenerators(generators) {
         }
     }
 
-    return generators.map(generator => {
-        new Generator(generator.x, generator.y, generator.weight * minK)
-    })
+    return generators.map(generator => new Generator(generator.x, generator.y, generator.weight * minK))
 }

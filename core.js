@@ -42,12 +42,15 @@ export class Line {
 
 export class Polygon {
     constructor(vertices) {
+        if (vertices.length < 3) {
+            throw 'Illegal argument'
+        }
         this.vertices = vertices
     }
 
     area() {
         let area
-        processFacets((begin, end) => {
+        this.processFacets((begin, end) => {
             const ik = begin.x
             const jk = begin.y
             const ik1 = end.x
@@ -63,7 +66,7 @@ export class Polygon {
         let ax
         let ay
         let area
-        processFacets((begin, end) => {
+        this.processFacets((begin, end) => {
             const xk = begin.x
             const yk = begin.y
             const xk1 = end.x
@@ -82,7 +85,7 @@ export class Polygon {
 
     contains(point) {
         let result = false
-        processFacets((begin, end) => {
+        this.processFacets((begin, end) => {
             const p_x = point.x
             const p_y = point.y
             const begin_x = begin.x
@@ -105,20 +108,21 @@ export class Polygon {
     }
 
     processFacets(callback) {
+        //TODO don't use iterator
         const iterator = this.vertices[Symbol.iterator]()
         const first = iterator.next().value
         let begin = first
         let end
         let interrupted
-        do {
-            const next = iterator.next()
+        let next
+        while (!(next = iterator.next()).done) {
             end = next.value
             interrupted = !callback(begin, end)
             if (interrupted) {
                 break
             }
             begin = end
-        } while (!next.done)
+        }
         if (!interrupted) {
             interrupted = !callback(begin, first)
         }
