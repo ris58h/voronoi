@@ -108,23 +108,17 @@ export class Polygon {
     }
 
     processFacets(callback) {
-        //TODO don't use iterator
-        const iterator = this.vertices[Symbol.iterator]()
-        const first = iterator.next().value
-        let begin = first
-        let end
-        let interrupted
-        let next
-        while (!(next = iterator.next()).done) {
-            end = next.value
-            interrupted = !callback(begin, end)
-            if (interrupted) {
+        const length = this.vertices.length
+        for (let i = 0; i < length; i++) {
+            const begin = this.vertices[i]
+            let endIndex = i + 1
+            if (endIndex == length) {
+                endIndex = 0
+            }
+            const end = this.vertices[endIndex]
+            if (!callback(begin, end)) {
                 break
             }
-            begin = end
-        }
-        if (!interrupted) {
-            interrupted = !callback(begin, first)
         }
     }
 }
