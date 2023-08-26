@@ -165,7 +165,10 @@ function tooClose(p1, p2) {
 }
 
 function normalizedGeneratorsWithRespectToDistances(generators) {
-    //TODO case with array of one element
+    if (generators.length < 2) {
+        return generators
+    }
+
     let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.length - 1; i++) {
         for (let j = i + 1; j < generators.length; j++) {
