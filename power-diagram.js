@@ -122,10 +122,6 @@ function cut(generator, polygon, line) {
     })
     //TODO do it earlier while processing facets
     newVertices = reduceVertices(newVertices)
-    const newSize = newVertices.length
-    if (newSize < 3) {
-        throw `Illegal state`
-    }
     const newPolygon = new Polygon(newVertices)
     if (!newPolygon.contains(generator)) {
         throw 'Illegal state'
