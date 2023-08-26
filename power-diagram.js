@@ -109,7 +109,7 @@ function intersection(l1, l2) {
 
 function cut(generator, polygon, line) {
     const newVertices = []
-    polygon.processFacets((begin, end) => {
+    polygon.forEachFacet((begin, end) => {
         if (notOnOppositeSides(generator, begin, line)) {
             newVertices.push(begin)
         }
@@ -118,7 +118,6 @@ function cut(generator, polygon, line) {
         if (intersectionPoint != null) {
             newVertices.push(intersectionPoint)
         }
-        return true
     })
     //TODO do it earlier while processing facets
     const reducedVertices = reduceVertices(newVertices)

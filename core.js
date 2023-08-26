@@ -50,14 +50,12 @@ export class Polygon {
 
     area() {
         let area
-        this.processFacets((begin, end) => {
+        this.forEachFacet((begin, end) => {
             const ik = begin.x
             const jk = begin.y
             const ik1 = end.x
             const jk1 = end.y
             area += ik * jk1 - ik1 * jk
-
-            return true
         })
         return Math.abs(0.5 * area)
     }
@@ -66,7 +64,7 @@ export class Polygon {
         let ax
         let ay
         let area
-        this.processFacets((begin, end) => {
+        this.forEachFacet((begin, end) => {
             const xk = begin.x
             const yk = begin.y
             const xk1 = end.x
@@ -76,8 +74,6 @@ export class Polygon {
             area += shared
             ax += (xk + xk1) * shared
             ay += (yk + yk1) * shared
-
-            return true
         })
         area *= 0.5
         return new Point(ax / (6 * area), ay / (6 * area))
@@ -120,5 +116,12 @@ export class Polygon {
                 break
             }
         }
+    }
+
+    forEachFacet(callback) {
+        this.processFacets((begin, end) => {
+            callback(begin, end)
+            return true
+        })
     }
 }
