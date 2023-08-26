@@ -48,62 +48,7 @@ export class Polygon {
         this.vertices = vertices
     }
 
-    area() {
-        let area
-        this.forEachFacet((begin, end) => {
-            const ik = begin.x
-            const jk = begin.y
-            const ik1 = end.x
-            const jk1 = end.y
-            area += ik * jk1 - ik1 * jk
-        })
-        return Math.abs(0.5 * area)
-    }
-
-    centroid() {
-        let ax
-        let ay
-        let area
-        this.forEachFacet((begin, end) => {
-            const xk = begin.x
-            const yk = begin.y
-            const xk1 = end.x
-            const yk1 = end.y
-
-            const shared = xk * yk1 - xk1 * yk
-            area += shared
-            ax += (xk + xk1) * shared
-            ay += (yk + yk1) * shared
-        })
-        area *= 0.5
-        return new Point(ax / (6 * area), ay / (6 * area))
-    }
-
-    contains(point) {
-        let result = false
-        this.processFacets((begin, end) => {
-            const p_x = point.x
-            const p_y = point.y
-            const begin_x = begin.x
-            const begin_y = begin.y
-            const end_x = end.x
-            const end_y = end.y
-
-            if ((p_x == begin_x && p_y == begin_y) || (p_x == end_x && p_y == end_y)) {
-                result = true
-                return false
-            }
-
-            if ( ((end_y > p_y) != (begin_y > p_y)) && (p_x < (begin_x - end_x) * (p_y - end_y) / (begin_y - end_y) + end_x) ){
-                result = !result
-            }
-
-            return true
-        })
-        return result
-    }
-
-    processFacets(callback) {
+    forEachFacet(callback) {
         const length = this.vertices.length
         for (let i = 0; i < length; i++) {
             const begin = this.vertices[i]
@@ -112,16 +57,7 @@ export class Polygon {
                 endIndex = 0
             }
             const end = this.vertices[endIndex]
-            if (!callback(begin, end)) {
-                break
-            }
-        }
-    }
-
-    forEachFacet(callback) {
-        this.processFacets((begin, end) => {
             callback(begin, end)
-            return true
-        })
+        }
     }
 }
