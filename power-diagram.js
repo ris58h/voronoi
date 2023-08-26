@@ -169,12 +169,9 @@ function normalizedGeneratorsWithRespectToDistances(generators) {
     let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.length - 1; i++) {
         for (let j = i + 1; j < generators.length; j++) {
-            let dist = generators[i].distanceTo(generators[j])
-            let ws = generators[i].weight + generators[j].weight
-            if (!Number.isFinite(ws)) {
-                ws = Number.MAX_VALUE
-            }
-            let k = dist / ws
+            const dist = generators[i].distanceTo(generators[j])
+            const ws = generators[i].weight + generators[j].weight
+            const k = dist / ws
             minK = Math.min(minK, k)
         }
     }
