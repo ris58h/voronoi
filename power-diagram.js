@@ -108,7 +108,7 @@ function intersection(l1, l2) {
 }
 
 function cut(generator, polygon, line) {
-    let newVertices = []
+    const newVertices = []
     polygon.processFacets((begin, end) => {
         if (notOnOppositeSides(generator, begin, line)) {
             newVertices.push(begin)
@@ -121,12 +121,8 @@ function cut(generator, polygon, line) {
         return true
     })
     //TODO do it earlier while processing facets
-    newVertices = reduceVertices(newVertices)
-    const newPolygon = new Polygon(newVertices)
-    if (!newPolygon.contains(generator)) {
-        throw 'Illegal state'
-    }
-    return newPolygon
+    const reducedVertices = reduceVertices(newVertices)
+    return new Polygon(reducedVertices)
 }
 
 //TODO naming
