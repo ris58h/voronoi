@@ -6,6 +6,10 @@ export function calculate(boundPolygon, generators) {
         return []
     }
 
+    if (length == 1) {
+        return [boundPolygon]
+    }
+
     generators = normalizedGeneratorsWithRespectToDistances(generators)
     const cellBounds = Array(length).fill(boundPolygon)
     for (let i = 0; i < length - 1; i++) {
