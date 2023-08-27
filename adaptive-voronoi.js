@@ -1,6 +1,6 @@
 import {Line, Point, Polygon, WeightedPoint} from "./core.js"
 
-export function calculate(boundPolygon, generators, voronoi, eps = 0.001, maxIterations = 10) {
+export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxIterations = 10) {
     const length = generators.length
     const wholeArea = boundPolygon.area()
     const desiredNormalizedAreas = []
