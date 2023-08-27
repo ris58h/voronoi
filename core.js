@@ -43,7 +43,7 @@ export class Line {
 export class Polygon {
     constructor(vertices) {
         if (vertices.length < 3) {
-            throw 'Polygon must have at least 3 vertices'
+            throw `Polygon must have at least 3 vertices. Got [${vertices}].`
         }
         this.vertices = vertices
     }
