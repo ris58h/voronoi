@@ -110,7 +110,7 @@ function intersection(l1, l2) {
 function cut(generator, polygon, line) {
     const newVertices = []
     polygon.forEachFacet((begin, end) => {
-        if (notOnOppositeSides(generator, begin, line)) {
+        if (!onOppositeSides(generator, begin, line)) {
             newVertices.push(begin)
         }
         const facet = new Line(begin, end)
@@ -122,8 +122,7 @@ function cut(generator, polygon, line) {
     return new Polygon(newVertices)
 }
 
-//TODO naming
-function notOnOppositeSides(p1, p2, l) {
+function onOppositeSides(p1, p2, l) {
     const ax = p1.x
     const ay = p1.y
     const bx = p2.x
@@ -132,7 +131,7 @@ function notOnOppositeSides(p1, p2, l) {
     const y1 = l.begin.y
     const x2 = l.end.x
     const y2 = l.end.y
-    return ((y1 - y2) * (ax - x1) + (x2 - x1) * (ay - y1)) * ((y1 - y2) * (bx - x1) + (x2 - x1) * (by - y1)) >= 0
+    return ((y1 - y2) * (ax - x1) + (x2 - x1) * (ay - y1)) * ((y1 - y2) * (bx - x1) + (x2 - x1) * (by - y1)) < 0
 }
 
 function normalizedGeneratorsWithRespectToDistances(generators) {
