@@ -18,6 +18,7 @@
     <script type="module">
         import {Line, Point, Polygon, WeightedPoint} from "./core.js"
         import * as powerDiagram from "./power-diagram.js"
+        import * as adaptiveVoronoi from "./adaptive-voronoi.js"
 
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
         const generators = [
@@ -30,7 +31,8 @@
             new WeightedPoint(10, 50, 30),
             new WeightedPoint(80, 80, 30),
         ]
-        const cells = powerDiagram.calculate(boundPolygon, generators)
+        // const cells = powerDiagram.calculate(boundPolygon, generators)
+        const cells = adaptiveVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate)
 
         const colors = [
             "blue",

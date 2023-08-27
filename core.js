@@ -48,6 +48,37 @@ export class Polygon {
         this.vertices = vertices
     }
 
+    area() {
+        let area = 0
+        this.forEachFacet((begin, end) => {
+            const ik = begin.x
+            const jk = begin.y
+            const ik1 = end.x
+            const jk1 = end.y
+            area += ik * jk1 - ik1 * jk
+        })
+        return Math.abs(0.5 * area)
+    }
+
+    centroid() {
+        let ax = 0
+        let ay = 0
+        let area = 0
+        this.forEachFacet((begin, end) => {
+            const xk = begin.x
+            const yk = begin.y
+            const xk1 = end.x
+            const yk1 = end.y
+
+            const shared = xk * yk1 - xk1 * yk
+            area += shared
+            ax += (xk + xk1) * shared
+            ay += (yk + yk1) * shared
+        })
+        area *= 0.5
+        return new Point(ax / (6 * area), ay / (6 * area))
+    }
+
     forEachFacet(callback) {
         const length = this.vertices.length
         for (let i = 0; i < length; i++) {
