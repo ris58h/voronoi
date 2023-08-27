@@ -119,9 +119,7 @@ function cut(generator, polygon, line) {
             newVertices.push(intersectionPoint)
         }
     })
-    //TODO do it earlier while processing facets
-    const reducedVertices = reduceVertices(newVertices)
-    return new Polygon(reducedVertices)
+    return new Polygon(newVertices)
 }
 
 //TODO naming
@@ -135,24 +133,6 @@ function notOnOppositeSides(p1, p2, l) {
     const x2 = l.end.x
     const y2 = l.end.y
     return ((y1 - y2) * (ax - x1) + (x2 - x1) * (ay - y1)) * ((y1 - y2) * (bx - x1) + (x2 - x1) * (by - y1)) >= 0
-}
-
-function reduceVertices(points) {
-    const result = []
-    let prev = null
-    for (let point of points) {
-        if (prev == null || !tooClose(prev, point)) {
-            result.push(point)
-        }
-        prev = point
-    }
-    return result
-}
-
-const EPS = 0.01
-
-function tooClose(p1, p2) {
-    return p1.distanceTo(p2) < EPS
 }
 
 function normalizedGeneratorsWithRespectToDistances(generators) {
