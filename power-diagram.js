@@ -1,4 +1,4 @@
-import {Line, Point, Polygon, WeightedPoint} from "./core.js"
+import {Generator, Line, Point, Polygon} from "./core.js"
 
 export function calculate(boundPolygon, generators) {
     const length = generators.length
@@ -149,5 +149,5 @@ function normalizedGeneratorsWithRespectToDistances(generators) {
         }
     }
 
-    return generators.map(generator => new WeightedPoint(generator.x, generator.y, generator.weight * minK))
+    return generators.map(generator => new Generator(generator.x, generator.y, generator.weight * minK))
 }

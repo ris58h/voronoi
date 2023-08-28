@@ -1,8 +1,8 @@
-import {Line, Point, Polygon, WeightedPoint} from "./core.js"
+import {Generator, Line, Point, Polygon} from "./core.js"
 
 export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxIterations = 1000) {
     const length = generators.length
-    const movingGenerators = generators.map(generator => new WeightedPoint(generator.x, generator.y, generator.weight))
+    const movingGenerators = generators.map(generator => new Generator(generator.x, generator.y, generator.weight))
     let iterationNumber = 0
     let cells
     while (true) {

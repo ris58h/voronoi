@@ -17,32 +17,32 @@
     <svg id="svg3" width="400" height="400" viewBox="0 0 100 100"></svg>
 
     <script type="module">
-        import {Line, Point, Polygon, WeightedPoint} from "./core.js"
+        import {Generator, Line, Point, Polygon} from "./core.js"
         import * as powerDiagram from "./power-diagram.js"
         import * as centroidalVoronoi from "./centroidal-voronoi.js"
         import * as adaptiveVoronoi from "./adaptive-voronoi.js"
 
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
         const generators = [
-            new WeightedPoint(20, 20, 100),
-            new WeightedPoint(40, 20, 10),
-            new WeightedPoint(60, 20, 200),
-            new WeightedPoint(80, 20, 60),
+            new Generator(20, 20, 100),
+            new Generator(40, 20, 10),
+            new Generator(60, 20, 200),
+            new Generator(80, 20, 60),
 
-            new WeightedPoint(20, 40, 170),
-            new WeightedPoint(40, 40, 110),
-            new WeightedPoint(60, 40, 30),
-            new WeightedPoint(80, 40, 90),
+            new Generator(20, 40, 170),
+            new Generator(40, 40, 110),
+            new Generator(60, 40, 30),
+            new Generator(80, 40, 90),
             
-            new WeightedPoint(20, 60, 600),
-            new WeightedPoint(40, 60, 120),
-            new WeightedPoint(60, 60, 120),
-            new WeightedPoint(80, 60, 10),
+            new Generator(20, 60, 600),
+            new Generator(40, 60, 120),
+            new Generator(60, 60, 120),
+            new Generator(80, 60, 10),
 
-            new WeightedPoint(20, 80, 340),
-            new WeightedPoint(40, 80, 300),
-            new WeightedPoint(60, 80, 200),
-            new WeightedPoint(80, 80, 100),
+            new Generator(20, 80, 340),
+            new Generator(40, 80, 300),
+            new Generator(60, 80, 200),
+            new Generator(80, 80, 100),
         ]
         drawCells("svg", powerDiagram.calculate(boundPolygon, generators))
         drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
@@ -65,8 +65,8 @@
             cells.forEach((cell, index) => {
                 svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length], "white"))
 
-                const weightedPoint = generators[index]
-                svg.appendChild(textElement(weightedPoint.x, weightedPoint.y, weightedPoint.weight))
+                const Generator = generators[index]
+                svg.appendChild(textElement(Generator.x, Generator.y, Generator.weight))
             })
 
             function polygonElement(points, fill = "none", stroke = "black") {

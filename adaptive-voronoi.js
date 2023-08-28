@@ -1,11 +1,11 @@
-import {Line, Point, Polygon, WeightedPoint} from "./core.js"
+import {Generator, Line, Point, Polygon} from "./core.js"
 
 export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxIterations = 10) {
     const length = generators.length
     const wholeArea = boundPolygon.area()
     const totalWeight = generators.reduce((acc, generator) => acc + generator.weight, 0)
     const desiredNormalizedAreas = generators.map(generator => generator.weight / totalWeight)
-    const movingGenerators = generators.map(generator => new WeightedPoint(generator.x, generator.y, 1.0))
+    const movingGenerators = generators.map(generator => new Generator(generator.x, generator.y, 1.0))
     const normalizedAreas = []
     let iterationNumber = 0
     let cells
