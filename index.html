@@ -65,8 +65,9 @@
             cells.forEach((cell, index) => {
                 svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length], "white"))
 
-                const Generator = generators[index]
-                svg.appendChild(textElement(Generator.x, Generator.y, Generator.weight))
+                const centroid = cell.centroid()
+                const generator = generators[index]
+                svg.appendChild(textElement(centroid.x, centroid.y, generator.weight))
             })
 
             function polygonElement(points, fill = "none", stroke = "black") {
