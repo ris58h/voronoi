@@ -5,15 +5,17 @@ export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxItera
     const wholeArea = boundPolygon.area()
     const totalWeight = generators.reduce((acc, generator) => acc + generator.weight, 0)
     const desiredNormalizedAreas = generators.map(generator => generator.weight / totalWeight)
-    const adaptedGenerators = generators.map(generator => new WeightedPoint(generator.x, generator.y, 1.0))
+    const movingGenerators = generators.map(generator => new WeightedPoint(generator.x, generator.y, 1.0))
     const normalizedAreas = []
-    let stable
     let iterationNumber = 0
     let cells
     while (true) {
         iterationNumber++
-        cells = voronoi(boundPolygon, adaptedGenerators)
-        stable = true
+        if (iterationNumber >= maxIterations) {
+            break
+        }
+        cells = voronoi(boundPolygon, movingGenerators)
+        let stable = true
         for (let i = 0; i < length; i++) {
             const cellArea = cells[i].area()
             normalizedAreas[i] = cellArea / wholeArea
@@ -21,14 +23,15 @@ export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxItera
                 stable = false
             }
         }
-        if (stable || iterationNumber >= maxIterations) {
+        if (stable) {
             break
         }
         for (let i = 0; i < length; i++) {
-            adaptedGenerators[i].weight = adjustWeight(adaptedGenerators[i].weight, normalizedAreas[i], desiredNormalizedAreas[i])
             const centroid = cells[i].centroid()
-            adaptedGenerators[i].x = centroid.x
-            adaptedGenerators[i].y = centroid.y
+            const movingGenerator = movingGenerators[i]
+            movingGenerator.x = centroid.x
+            movingGenerator.y = centroid.y
+            movingGenerator.weight = adjustWeight(movingGenerator.weight, normalizedAreas[i], desiredNormalizedAreas[i])
         }
     }
     return cells
