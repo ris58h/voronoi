@@ -24,30 +24,24 @@
 
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
         const generators = [
-            new Generator(20, 20, 100),
-            new Generator(40, 20, 10),
-            new Generator(60, 20, 200),
-            new Generator(80, 20, 60),
-
-            new Generator(20, 40, 170),
-            new Generator(40, 40, 110),
-            new Generator(60, 40, 30),
-            new Generator(80, 40, 90),
-            
-            new Generator(20, 60, 600),
-            new Generator(40, 60, 120),
-            new Generator(60, 60, 120),
-            new Generator(80, 60, 10),
-
-            new Generator(20, 80, 340),
-            new Generator(40, 80, 300),
-            new Generator(60, 80, 200),
-            new Generator(80, 80, 100),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
+            new Generator(rand(), rand(), rand()),
         ]
         drawCells("svg", powerDiagram.calculate(boundPolygon, generators))
         drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
         drawCells("svg3", adaptiveVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
 
+        function rand() {
+            return Math.floor(Math.random() * 100)
+        }
         
         function drawCells(elementId, cells) {
             const colors = [
