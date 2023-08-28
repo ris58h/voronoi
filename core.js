@@ -23,21 +23,6 @@ export class Line {
         this.begin = begin
         this.end = end
     }
-
-    distanceTo(point) {
-        return Line.distanceTo(this.begin, this.end, point)
-    }
-
-    static distanceTo(begin, end, point) {
-        const x0 = point.x
-        const y0 = point.y
-        const x1 = begin.x
-        const y1 = begin.y
-        const x2 = end.x
-        const y2 = end.y
-        const ed = euclidianDistance(x1, y1, x2, y2)
-        return Math.abs((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1) / ed
-    }
 }
 
 export class Polygon {
