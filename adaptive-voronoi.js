@@ -10,7 +10,7 @@ export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxItera
     let stable
     let iterationNumber = 0
     let cells
-    do {
+    while (true) {
         iterationNumber++
         cells = voronoi(boundPolygon, adaptedGenerators)
         stable = true
@@ -21,15 +21,16 @@ export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxItera
                 stable = false
             }
         }
-        if (!stable && iterationNumber < maxIterations) {
-            for (let i = 0; i < length; i++) {
-                adaptedGenerators[i].weight = adjustWeight(adaptedGenerators[i].weight, normalizedAreas[i], desiredNormalizedAreas[i])
-                const centroid = cells[i].centroid()
-                adaptedGenerators[i].x = centroid.x
-                adaptedGenerators[i].y = centroid.y
-            }
+        if (stable || iterationNumber >= maxIterations) {
+            break
         }
-    } while (!stable && iterationNumber < maxIterations)
+        for (let i = 0; i < length; i++) {
+            adaptedGenerators[i].weight = adjustWeight(adaptedGenerators[i].weight, normalizedAreas[i], desiredNormalizedAreas[i])
+            const centroid = cells[i].centroid()
+            adaptedGenerators[i].x = centroid.x
+            adaptedGenerators[i].y = centroid.y
+        }
+    }
     return cells
 }
 
