@@ -20,7 +20,6 @@
         import {Generator, Line, Point, Polygon} from "./core.js"
         import * as powerDiagram from "./power-diagram.js"
         import * as centroidalVoronoi from "./centroidal-voronoi.js"
-        import * as adaptiveVoronoi from "./adaptive-voronoi.js"
 
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
         const generators = [
@@ -37,7 +36,6 @@
         ]
         drawCells("svg", powerDiagram.calculate(boundPolygon, generators))
         drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
-        drawCells("svg3", adaptiveVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
 
         function rand() {
             return Math.floor(Math.random() * 100)
