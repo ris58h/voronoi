@@ -3,17 +3,9 @@ import {Line, Point, Polygon, WeightedPoint} from "./core.js"
 export function calculate(boundPolygon, generators, voronoi, eps = 0.1, maxIterations = 10) {
     const length = generators.length
     const wholeArea = boundPolygon.area()
-    const desiredNormalizedAreas = []
-    let sum = 0
-    for (let i = 0; i < length; i++) {
-        sum += generators[i].weight
-    }
-    for (let i = 0; i < length; i++) {
-        desiredNormalizedAreas[i] = generators[i].weight / sum
-    }
-    const adaptedGenerators = generators.map(generator => {
-        return new WeightedPoint(generator.x, generator.y, 1.0)
-    })
+    const totalWeight = generators.reduce((acc, generator) => acc + generator.weight, 0)
+    const desiredNormalizedAreas = generators.map(generator => generator.weight / totalWeight)
+    const adaptedGenerators = generators.map(generator => new WeightedPoint(generator.x, generator.y, 1.0))
     const normalizedAreas = []
     let stable
     let iterationNumber = 0
