@@ -13,13 +13,13 @@
 </head>
 <body>
     <h1>Voronoi</h1>
-    <p><a href="https://en.wikipedia.org/wiki/Power_diagram">Power Diagram</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Power Diagram:</p>
+    <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Weighted Voronoi:</p>
     <svg id="svg" width="400" height="400" viewBox="0 0 100 100"></svg>
     <svg id="svg2" width="400" height="400" viewBox="0 0 100 100"></svg>
 
     <script type="module">
         import {Generator, Line, Point, Polygon} from "./core.js"
-        import * as powerDiagram from "./power-diagram.js"
+        import * as weightedVoronoi from "./weighted-voronoi.js"
         import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
         const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
@@ -35,13 +35,13 @@
             new Generator(rand(), rand(), rand()),
             new Generator(rand(), rand(), rand()),
         ]
-        drawCells("svg", powerDiagram.calculate(boundPolygon, generators))
-        drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, powerDiagram.calculate))
+        drawCells("svg", weightedVoronoi.calculate(boundPolygon, generators))
+        drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate))
 
         function rand() {
             return Math.floor(Math.random() * 100)
         }
-        
+
         function drawCells(elementId, cells) {
             const colors = [
                 "blue",
