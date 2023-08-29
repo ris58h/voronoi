@@ -33,18 +33,6 @@ export class Polygon {
         this.vertices = vertices
     }
 
-    area() {
-        let area = 0
-        this.forEachFacet((begin, end) => {
-            const ik = begin.x
-            const jk = begin.y
-            const ik1 = end.x
-            const jk1 = end.y
-            area += ik * jk1 - ik1 * jk
-        })
-        return Math.abs(0.5 * area)
-    }
-
     centroid() {
         let ax = 0
         let ay = 0
