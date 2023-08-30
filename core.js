@@ -23,6 +23,33 @@ export class Line {
         this.begin = begin
         this.end = end
     }
+
+    // Returns an intersection point with the other line. The intersectioon point can be out of the line bounds.
+    intersection(other) {
+        const x1 = this.begin.x
+        const y1 = this.begin.y
+        const x2 = this.end.x
+        const y2 = this.end.y
+        const x3 = other.begin.x
+        const y3 = other.begin.y
+        const x4 = other.end.x
+        const y4 = other.end.y
+    
+        const denom = ((y4 - y3) * (x2 - x1)) - ((x4 - x3) * (y2 - y1))
+        const numea = ((x4 - x3) * (y1 - y3)) - ((y4 - y3) * (x1 - x3))
+        // const numeb = ((x2 - x1) * (y1 - y3)) - ((y2 - y1) * (x1 - x3))
+    
+        if (denom == 0.0) {
+            return null
+        }
+    
+        const ua = numea / denom
+        // const ub = numeb / denom
+    
+        var x = x1 + (ua * (x2 - x1));
+        var y = y1 + (ua * (y2 - y1));
+        return new Point(x, y)
+    }
 }
 
 export class Polygon {

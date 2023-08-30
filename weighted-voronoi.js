@@ -66,7 +66,7 @@ function divisionLine(g_i, g_j) {
 }
 
 function intersectionOfFacetAndLine(facet, line) {
-    const intersectionPoint = intersection(facet, line)
+    const intersectionPoint = facet.intersection(line)
     if (intersectionPoint == null) {
         return null
     }
@@ -75,32 +75,9 @@ function intersectionOfFacetAndLine(facet, line) {
     const onFacetX = (Math.min(facet.begin.x, facet.end.x) <= intX) && (intX <= Math.max(facet.begin.x, facet.end.x))
     const onFacetY = (Math.min(facet.begin.y, facet.end.y) <= intY) && (intY <= Math.max(facet.begin.y, facet.end.y))
     if (onFacetX && onFacetY) {
-        return new Point(intX, intY)
+        return intersectionPoint
     }
     return null
-}
-
-function intersection(l1, l2) {
-    const denom = ((l2.end.y - l2.begin.y) * (l1.end.x - l1.begin.x)) -
-            ((l2.end.x - l2.begin.x) * (l1.end.y - l1.begin.y))
-
-    const numea = ((l2.end.x - l2.begin.x) * (l1.begin.y - l2.begin.y)) -
-            ((l2.end.y - l2.begin.y) * (l1.begin.x - l2.begin.x))
-
-    const numeb = ((l1.end.x - l1.begin.x) * (l1.begin.y - l2.begin.y)) -
-            ((l1.end.y - l1.begin.y) * (l1.begin.x - l2.begin.x))
-
-    if (denom == 0.0) {
-        return null
-    }
-
-    const ua = numea / denom
-    const ub = numeb / denom//TODO not used?
-
-    const intX = l1.begin.x + ua * (l1.end.x - l1.begin.x)
-    const intY = l1.begin.y + ua * (l1.end.y - l1.begin.y)
-
-    return new Point(intX, intY)
 }
 
 function cut(generator, polygon, line) {
