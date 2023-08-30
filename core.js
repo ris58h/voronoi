@@ -25,7 +25,7 @@ export class Line {
     }
 
     // Returns an intersection point with the other line. The intersectioon point can be out of the line bounds.
-    intersection(other) {
+    intersection(other, strictOnThis = false, strictOnOther = false) {
         const x1 = this.begin.x
         const y1 = this.begin.y
         const x2 = this.end.x
@@ -36,19 +36,33 @@ export class Line {
         const y4 = other.end.y
     
         const denom = ((y4 - y3) * (x2 - x1)) - ((x4 - x3) * (y2 - y1))
-        const numea = ((x4 - x3) * (y1 - y3)) - ((y4 - y3) * (x1 - x3))
-        // const numeb = ((x2 - x1) * (y1 - y3)) - ((y2 - y1) * (x1 - x3))
-    
         if (denom == 0.0) {
             return null
         }
-    
+        const numea = ((x4 - x3) * (y1 - y3)) - ((y4 - y3) * (x1 - x3))
         const ua = numea / denom
-        // const ub = numeb / denom
     
         var x = x1 + (ua * (x2 - x1));
         var y = y1 + (ua * (y2 - y1));
-        return new Point(x, y)
+        const result = new Point(x, y)
+        if (strictOnThis && !inLineBounds(result, this)) {
+            return null
+        }
+        if (strictOnOther && !inLineBounds(result, other)) {
+            return null
+        }
+        return result
+
+        function inLineBounds(point, line) {
+            const x = point.x
+            const y = point.y
+            const x1 = line.begin.x
+            const y1 = line.begin.y
+            const x2 = line.end.x
+            const y2 = line.end.y
+            return (Math.min(x1, x2) <= x) && (x <= Math.max(x1, x2))
+                && (Math.min(y1, y2) <= y) && (y <= Math.max(y1, y2))
+        }
     }
 }
 

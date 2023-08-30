@@ -65,21 +65,6 @@ function divisionLine(g_i, g_j) {
     return new Line(new Point(x1, y1), new Point(x2, y2))
 }
 
-function intersectionOfFacetAndLine(facet, line) {
-    const intersectionPoint = facet.intersection(line)
-    if (intersectionPoint == null) {
-        return null
-    }
-    const intX = intersectionPoint.x
-    const intY = intersectionPoint.y
-    const onFacetX = (Math.min(facet.begin.x, facet.end.x) <= intX) && (intX <= Math.max(facet.begin.x, facet.end.x))
-    const onFacetY = (Math.min(facet.begin.y, facet.end.y) <= intY) && (intY <= Math.max(facet.begin.y, facet.end.y))
-    if (onFacetX && onFacetY) {
-        return intersectionPoint
-    }
-    return null
-}
-
 function cut(generator, polygon, line) {
     const newVertices = []
     polygon.forEachFacet((begin, end) => {
@@ -87,7 +72,7 @@ function cut(generator, polygon, line) {
             newVertices.push(begin)
         }
         const facet = new Line(begin, end)
-        const intersectionPoint = intersectionOfFacetAndLine(facet, line)
+        const intersectionPoint = facet.intersection(line, true)
         if (intersectionPoint != null) {
             newVertices.push(intersectionPoint)
         }
