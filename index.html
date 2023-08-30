@@ -18,9 +18,24 @@
         svg text {
             font-size: 4px;
         }
+
+        .github-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .github-link img {
+            width: 32px;
+            height: 32px;
+        }
     </style>
 </head>
 <body>
+    <a class="github-link" href="https://github.com/ris58h/voronoi">
+        <img src="img/github-mark.png" alt="GitHub">
+    </a>
+
     <h1>Voronoi</h1>
     <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Weighted Voronoi:</p>
     <div id="weighted-voronoi" class="diagram"></div>
