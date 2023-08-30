@@ -91,10 +91,6 @@ function intersection(l1, l2) {
             ((l1.end.y - l1.begin.y) * (l1.begin.x - l2.begin.x))
 
     if (denom == 0.0) {
-        //TODO
-        if (numea == 0.0 && numeb == 0.0) {
-            return null
-        }
         return null
     }
 
