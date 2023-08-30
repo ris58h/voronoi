@@ -1,4 +1,4 @@
-import {Generator, Line, Point, Polygon} from "./core.js"
+import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 
 export function calculate(boundPolygon, generators) {
     const length = generators.length
@@ -78,18 +78,6 @@ function cut(generator, polygon, line) {
         }
     })
     return new Polygon(newVertices)
-}
-
-function onOppositeSides(p1, p2, l) {
-    const ax = p1.x
-    const ay = p1.y
-    const bx = p2.x
-    const by = p2.y
-    const x1 = l.begin.x
-    const y1 = l.begin.y
-    const x2 = l.end.x
-    const y2 = l.end.y
-    return ((y1 - y2) * (ax - x1) + (x2 - x1) * (ay - y1)) * ((y1 - y2) * (bx - x1) + (x2 - x1) * (by - y1)) < 0
 }
 
 function normalizedGeneratorsWithRespectToDistances(generators) {
