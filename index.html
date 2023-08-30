@@ -6,8 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voronoi</title>
     <style>
+        .diagram {
+            width: 400px;
+            height: 400px;
+            display: inline-block;
+        }
+
         svg {
-            border: solid black 1px;
+            border: solid black;
         }
         svg text {
             font-size: 4px;
@@ -17,15 +23,17 @@
 <body>
     <h1>Voronoi</h1>
     <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Weighted Voronoi:</p>
-    <svg id="svg" width="400" height="400" viewBox="0 0 100 100"></svg>
-    <svg id="svg2" width="400" height="400" viewBox="0 0 100 100"></svg>
+    <div id="weighted-voronoi" class="diagram"></div>
+    <div id="centroidal-voronoi" class="diagram"></div>
 
     <script type="module">
         import {Generator, Line, Point, Polygon} from "./core.js"
         import * as weightedVoronoi from "./weighted-voronoi.js"
         import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
-        const boundPolygon = new Polygon([new Point(0, 0), new Point(100, 0), new Point(100, 100), new Point(0, 100)])
+        const size = 100
+
+        const boundPolygon = new Polygon([new Point(0, 0), new Point(size, 0), new Point(size, size), new Point(0, size)])
         const generators = [
             new Generator(rand(), rand(), rand()),
             new Generator(rand(), rand(), rand()),
@@ -38,15 +46,21 @@
             new Generator(rand(), rand(), rand()),
             new Generator(rand(), rand(), rand()),
         ]
-        drawCells("svg", weightedVoronoi.calculate(boundPolygon, generators))
-        drawCells("svg2", centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate))
+        drawCells(weightedVoronoi.calculate(boundPolygon, generators), "weighted-voronoi", {
+            showGeneratorPoints: true,
+            showGeneratorWeights: true,
+        })
+        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate), "centroidal-voronoi", {
+            showCellPoints: true,
+            showCellWeights: true,
+        })
 
         function rand() {
-            return Math.floor(Math.random() * 100)
+            return Math.floor(Math.random() * size)
         }
 
-        function drawCells(elementId, cells) {
-            const colors = [
+        function drawCells(cells, containerId, options = {}) {
+            const cellColors = options?.cellColors ?? [
                 "blue",
                 "brown",
                 "coral",
@@ -54,32 +68,68 @@
                 "grey",
                 "orange",
                 "red",
-                "yellow",
+                "gold",
             ]
+            const showGeneratorPoints = options?.showGeneratorPoints ?? false
+            const showGeneratorWeights = options?.showGeneratorWeights ?? false
+            const showGeneratorCircles = options?.showGeneratorCircles ?? false
+            const showCellPoints = options?.showCellPoints ?? false
+            const showCellWeights = options?.showCellWeights ?? false
 
-            const svg = document.getElementById(elementId)
+            const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+            svgElement.setAttribute("viewBox", `0 0 ${size} ${size}`)
+            document.getElementById(containerId).appendChild(svgElement)
+
             cells.forEach((cell, index) => {
-                svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length]))
+                drawPolygon(cell.vertices, cellColors[index % cellColors.length])
 
                 const centroid = cell.centroid()
-                const generator = generators[index]
-                svg.appendChild(textElement(centroid.x, centroid.y, generator.weight))
+                if (showCellPoints) {
+                    drawCircle(centroid.x, centroid.y, size/200, "white", "white")
+                }
+                if (showCellWeights) {
+                    const generator = generators[index]
+                    drawText(centroid.x, centroid.y, generator.weight, "white")
+                }
+            })
+            
+            generators.forEach(generator => {
+                if (showGeneratorPoints) {
+                    drawCircle(generator.x, generator.y, size/200, "black")
+                }
+                if (showGeneratorWeights) {
+                    drawText(generator.x, generator.y, generator.weight)
+                }
+                if (showGeneratorCircles) {
+                    drawCircle(generator.x, generator.y, generator.weight)
+                }
             })
 
-            function polygonElement(points, fill = "none", stroke = "black") {
+            function drawPolygon(points, fill = "none", stroke = "black") {
                 const element = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
                 element.setAttribute("points", points.map(v => `${v.x},${v.y}`).join(" "))
                 element.setAttribute("fill", fill)
                 element.setAttribute("stroke", stroke)
-                return element
+                svgElement.appendChild(element)
             }
 
-            function textElement(x, y, text) {
+            function drawText(x, y, text, fill = "black") {
                 const element = document.createElementNS("http://www.w3.org/2000/svg", "text")
                 element.setAttribute("x", x)
                 element.setAttribute("y", y)
                 element.textContent = text
-                return element
+                element.setAttribute("fill", fill)
+                svgElement.appendChild(element)
+            }
+
+            function drawCircle(x, y, r, fill = "none", stroke = "black") {
+                const element = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+                element.setAttribute("cx", x)
+                element.setAttribute("cy", y)
+                element.setAttribute("r", r)
+                element.setAttribute("fill", fill)
+                element.setAttribute("stroke", stroke)
+                svgElement.appendChild(element)
             }
         }
     </script>        
