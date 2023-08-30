@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voronoi</title>
     <style>
+        svg {
+            border: solid black 1px;
+        }
         svg text {
             font-size: 4px;
         }
@@ -56,7 +59,7 @@
 
             const svg = document.getElementById(elementId)
             cells.forEach((cell, index) => {
-                svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length], "white"))
+                svg.appendChild(polygonElement(cell.vertices, colors[index % colors.length]))
 
                 const centroid = cell.centroid()
                 const generator = generators[index]
