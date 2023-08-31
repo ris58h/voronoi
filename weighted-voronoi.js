@@ -1,9 +1,12 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 import * as incrementalVoronoi from "./incremental-voronoi.js"
 
+// The result is different from Power Diagram!
 // It's like a power diagram and uses the same distance,
 // but radical axis between two generators in the power diagram can be outside a segment between the generators,
 // so we normalize the weights so the radical axes always be between the corresponding generators.
+// See https://en.wikipedia.org/wiki/Power_diagram
+// See https://en.wikipedia.org/wiki/Radical_axis
 export function calculate(boundPolygon, generators) {
     const length = generators.length
     if (length == 0) {
