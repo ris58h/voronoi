@@ -2,7 +2,7 @@ import {Generator, Line, Point, Polygon} from "./core.js"
 
 export function calculate(boundPolygon, generators, voronoi, options) {
     const eps = options?.eps ?? 0.1
-    const maxIterations = options?.maxIterations ?? 1000
+    const maxIterations = options?.maxIterations ?? 10
     const length = generators.length
     const movingGenerators = generators.map(generator => new Generator(generator.x, generator.y, generator.weight))
     let iterationNumber = 0
