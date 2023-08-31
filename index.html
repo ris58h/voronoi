@@ -51,12 +51,16 @@
     </a>
 
     <h1>Voronoi</h1>
-    <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Weighted Voronoi:</p>
-    <div id="weighted-voronoi" class="diagram"></div>
+    <p><a href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi</a> and <a href="https://en.wikipedia.org/wiki/Centroidal_Voronoi_tessellation">Centroidal</a> Voronoi:</p>
+    <div id="voronoi" class="diagram"></div>
     <div id="centroidal-voronoi" class="diagram"></div>
+    <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and Centroidal Weighted Voronoi:</p>
+    <div id="weighted-voronoi" class="diagram"></div>
+    <div id="centroidal-weighted-voronoi" class="diagram"></div>
 
     <script type="module">
         import {Generator, Line, Point, Polygon} from "./core.js"
+        import * as voronoi from "./voronoi.js"
         import * as weightedVoronoi from "./weighted-voronoi.js"
         import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
@@ -75,11 +79,19 @@
             new Generator(rand(), rand(), rand()),
             new Generator(rand(), rand(), rand()),
         ]
+        drawCells(voronoi.calculate(boundPolygon, generators), "voronoi", {
+            showGeneratorPoints: true,
+            showGeneratorWeights: true,
+        })
+        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, voronoi.calculate), "centroidal-voronoi", {
+            showCellPoints: true,
+            showCellWeights: true,
+        })
         drawCells(weightedVoronoi.calculate(boundPolygon, generators), "weighted-voronoi", {
             showGeneratorPoints: true,
             showGeneratorWeights: true,
         })
-        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate), "centroidal-voronoi", {
+        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate), "centroidal-weighted-voronoi", {
             showCellPoints: true,
             showCellWeights: true,
         })
