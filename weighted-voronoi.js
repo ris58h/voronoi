@@ -48,21 +48,6 @@ function middlePoint(g1, g2) {
     return new Point(x, y)
 }
 
-function cut(generator, polygon, line) {
-    const newVertices = []
-    polygon.forEachFacet((begin, end) => {
-        if (!onOppositeSides(generator, begin, line)) {
-            newVertices.push(begin)
-        }
-        const facet = new Line(begin, end)
-        const intersectionPoint = facet.intersection(line, true)
-        if (intersectionPoint != null) {
-            newVertices.push(intersectionPoint)
-        }
-    })
-    return new Polygon(newVertices)
-}
-
 function normalizedGeneratorsWithRespectToDistances(generators) {
     if (generators.length < 2) {
         return generators
