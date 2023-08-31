@@ -29,11 +29,25 @@
             width: 32px;
             height: 32px;
         }
+
+        @media (prefers-color-scheme: dark) {
+            body, input, select, button, textarea {
+                color: #fff;
+                background: #000;
+            }
+
+            svg {
+                border-color: white;
+            }
+        }
     </style>
 </head>
 <body>
-    <a class="github-link" href="https://github.com/ris58h/voronoi">
-        <img src="img/github-mark.png" alt="GitHub">
+    <a class="github-link" href="https://github.com/ris58h/validatekeymaps">
+        <picture>
+            <source srcset="img/github-mark-white.png" media="(prefers-color-scheme: dark)">
+            <img src="img/github-mark.png" alt="GitHub">
+        </picture>
     </a>
 
     <h1>Voronoi</h1>
