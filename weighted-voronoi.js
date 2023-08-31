@@ -1,68 +1,48 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
+import * as incrementalVoronoi from "./incremental-voronoi.js"
 
+// It's like a power diagram and uses the same distance,
+// but radical axis between two generators in the power diagram can be outside a segment between the generators,
+// so we normalize the weights so the radical axes always be between the corresponding generators.
 export function calculate(boundPolygon, generators) {
     const length = generators.length
     if (length == 0) {
         return []
     }
-
     if (length == 1) {
         return [boundPolygon]
     }
 
     generators = normalizedGeneratorsWithRespectToDistances(generators)
-    const cellBounds = Array(length).fill(boundPolygon)
-    for (let i = 0; i < length - 1; i++) {
-        for (let j = i + 1; j < length; j++) {
-            const divider = divisionLine(generators[i], generators[j])
-            cellBounds[i] = cut(generators[i], cellBounds[i], divider)
-            cellBounds[j] = cut(generators[j], cellBounds[j], divider)
-        }
-    }
-    return cellBounds
+    return incrementalVoronoi.calculate(boundPolygon, generators, middlePoint)
 }
 
-function divisionLine(g_i, g_j) {
-    const x_i = g_i.x
-    const y_i = g_i.y
-    const w_i = g_i.weight
-    const x_j = g_j.x
-    const y_j = g_j.y
-    const w_j = g_j.weight
+function middlePoint(g1, g2) {
+    const x1 = g1.x
+    const y1 = g1.y
+    const w1 = g1.weight
+    const x2 = g2.x
+    const y2 = g2.y
+    const w2 = g2.weight
 
-    const dx = x_i - x_j
-    const dy = y_i - y_j
-    const bb = ((x_i * x_i - x_j * x_j) + (y_i * y_i - y_j * y_j) - (w_i * w_i - w_j * w_j)) / 2
-    function f_x(y) {
-        const k = -(dy / dx)
-        const b = bb / dx
-        const x = k * y + b
-        return x
-    }
-    function f_y(x) {
-        const k = -(dx / dy)
-        const b = bb / dy
-        const y = k * x + b
-        return y
-    }
+    const d = g1.distanceTo(g2)
+    const d1 = (d*d + w1*w1 - w2*w2) / (2*d)
 
-    let x1
-    let y1
-    let x2
-    let y2
-    if (y_i == y_j) {
-        y1 = 0
-        x1 = f_x(y1)
-        y2 = 1
-        x2 = f_x(y2)
-    } else {
-        x1 = 0
-        y1 = f_y(x1)
-        x2 = 1
-        y2 = f_y(x2)
+    if (x1 == x2) {
+        const x = x1
+        const y = y1 < y2 ? y1 + d1 : y1 - d1
+        return new Point(x, y)
     }
-
-    return new Line(new Point(x1, y1), new Point(x2, y2))
+    if (y1 == y2) {
+        const x = x1 < x2 ? x1 + d1 : x1 - d1
+        const y = y1
+        return new Point(x, y)
+    }
+    const dx = x2 - x1
+    const dy = y2 - y1
+    const x = (d1 * dx / d) + x1
+    const y = (d1 * dy / d) + y1
+    return new Point(x, y)
 }
 
 function cut(generator, polygon, line) {
