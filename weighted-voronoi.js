@@ -4,7 +4,7 @@ import * as incrementalVoronoi from "./incremental-voronoi.js"
 // The result is different from Power Diagram!
 // It's like a power diagram and uses the same distance,
 // but radical axis between two generators in the power diagram can be outside a segment between the generators,
-// so we normalize the weights so the radical axes always be between the corresponding generators.
+// so we adjust the weights so the radical axes always be between the corresponding generators.
 // See https://en.wikipedia.org/wiki/Power_diagram
 // See https://en.wikipedia.org/wiki/Radical_axis
 export function calculate(boundPolygon, generators) {
@@ -16,8 +16,8 @@ export function calculate(boundPolygon, generators) {
         return [boundPolygon]
     }
 
-    generators = normalizedGeneratorsWithRespectToDistances(generators)
-    return incrementalVoronoi.calculate(boundPolygon, generators, middlePoint)
+    const adjustedGenerators = adjustWeightsWithRespectToDistances(generators)
+    return incrementalVoronoi.calculate(boundPolygon, adjustedGenerators, middlePoint)
 }
 
 function middlePoint(g1, g2) {
@@ -48,7 +48,7 @@ function middlePoint(g1, g2) {
     return new Point(x, y)
 }
 
-function normalizedGeneratorsWithRespectToDistances(generators) {
+function adjustWeightsWithRespectToDistances(generators) {
     if (generators.length < 2) {
         return generators
     }
@@ -57,8 +57,8 @@ function normalizedGeneratorsWithRespectToDistances(generators) {
     for (let i = 0; i < generators.length - 1; i++) {
         for (let j = i + 1; j < generators.length; j++) {
             const dist = generators[i].distanceTo(generators[j])
-            const ws = generators[i].weight + generators[j].weight
-            const k = dist / ws
+            const combinedWeight = Math.max(generators[i].weight, generators[j].weight)
+            const k = dist / combinedWeight
             minK = Math.min(minK, k)
         }
     }
