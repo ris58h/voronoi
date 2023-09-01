@@ -127,7 +127,8 @@
 
             cells.forEach((cell, index) => {
                 drawPolygon(cell.vertices, cellColors[index % cellColors.length])
-
+            })
+            cells.forEach((cell, index) => {
                 const centroid = cell.centroid()
                 if (showCellPoints) {
                     drawCircle(centroid.x, centroid.y, size/200, "white", "white")
