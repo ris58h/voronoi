@@ -7,7 +7,7 @@ import * as incrementalVoronoi from "./incremental-voronoi.js"
 // so we adjust the weights so the radical axes always be between the corresponding generators.
 // See https://en.wikipedia.org/wiki/Power_diagram
 // See https://en.wikipedia.org/wiki/Radical_axis
-export function calculate(boundPolygon, generators) {
+export function calculate(boundPolygon, generators, weightsAdjustmentFactor) {
     const length = generators.length
     if (length == 0) {
         return []
@@ -16,7 +16,7 @@ export function calculate(boundPolygon, generators) {
         return [boundPolygon]
     }
 
-    const adjustedGenerators = adjustWeightsWithRespectToDistances(generators)
+    const adjustedGenerators = adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor)
     return incrementalVoronoi.calculate(boundPolygon, adjustedGenerators, middlePoint)
 }
 
@@ -48,7 +48,7 @@ function middlePoint(g1, g2) {
     return new Point(x, y)
 }
 
-function adjustWeightsWithRespectToDistances(generators) {
+function adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor) {
     if (generators.length < 2) {
         return generators
     }
@@ -56,9 +56,9 @@ function adjustWeightsWithRespectToDistances(generators) {
     let minK = Number.MAX_VALUE
     for (let i = 0; i < generators.length - 1; i++) {
         for (let j = i + 1; j < generators.length; j++) {
-            const dist = generators[i].distanceTo(generators[j])
-            const combinedWeight = Math.max(generators[i].weight, generators[j].weight)
-            const k = dist / combinedWeight
+            const g1 = generators[i]
+            const g2 = generators[j]
+            const k = weightsAdjustmentFactor(g1.distanceTo(g2), g1.weight, g2.weight)
             minK = Math.min(minK, k)
         }
     }

@@ -55,14 +55,15 @@
     <div id="voronoi" class="diagram"></div>
     <div id="centroidal-voronoi" class="diagram"></div>
     <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and Centroidal Weighted Voronoi:</p>
-    <div id="weighted-voronoi" class="diagram"></div>
-    <div id="centroidal-weighted-voronoi" class="diagram"></div>
+    <div id="max-weighted-voronoi" class="diagram"></div>
+    <div id="centroidal-max-weighted-voronoi" class="diagram"></div>
+    <p><a href="https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram">Weighted Voronoi</a> and Centroidal Weighted Voronoi:</p>
+    <div id="sum-weighted-voronoi" class="diagram"></div>
+    <div id="centroidal-sum-weighted-voronoi" class="diagram"></div>
 
     <script type="module">
         import {Generator, Line, Point, Polygon} from "./core.js"
         import * as voronoi from "./voronoi.js"
-        import * as weightedVoronoi from "./weighted-voronoi.js"
-        import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
         const size = 100
 
@@ -79,19 +80,27 @@
             new Generator(rand(), rand(), rand()),
             new Generator(rand(), rand(), rand()),
         ]
-        drawCells(voronoi.calculate(boundPolygon, generators), "voronoi", {
+        drawCells(voronoi.voronoi(boundPolygon, generators), "voronoi", {
             showGeneratorPoints: true,
             showGeneratorWeights: true,
         })
-        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, voronoi.calculate), "centroidal-voronoi", {
+        drawCells(voronoi.centroidal(boundPolygon, generators, voronoi.voronoi), "centroidal-voronoi", {
             showCellPoints: true,
             showCellWeights: true,
         })
-        drawCells(weightedVoronoi.calculate(boundPolygon, generators), "weighted-voronoi", {
+        drawCells(voronoi.weightedMax(boundPolygon, generators), "max-weighted-voronoi", {
             showGeneratorPoints: true,
             showGeneratorWeights: true,
         })
-        drawCells(centroidalVoronoi.calculate(boundPolygon, generators, weightedVoronoi.calculate), "centroidal-weighted-voronoi", {
+        drawCells(voronoi.centroidal(boundPolygon, generators, voronoi.weightedMax), "centroidal-max-weighted-voronoi", {
+            showCellPoints: true,
+            showCellWeights: true,
+        })
+        drawCells(voronoi.weightedSum(boundPolygon, generators), "sum-weighted-voronoi", {
+            showGeneratorPoints: true,
+            showGeneratorWeights: true,
+        })
+        drawCells(voronoi.centroidal(boundPolygon, generators, voronoi.weightedSum), "centroidal-sum-weighted-voronoi", {
             showCellPoints: true,
             showCellWeights: true,
         })
