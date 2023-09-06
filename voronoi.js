@@ -1,6 +1,6 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 import * as incrementalVoronoi from "./incremental-voronoi.js"
-import * as weightedVoronoi from "./weighted-voronoi.js"
+import * as adjustedPowerWeightedVoronoi from "./adjusted-power-weighted-voronoi.js"
 import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
 export function voronoi(boundPolygon, generators) {
@@ -19,10 +19,10 @@ export function centroidal(boundPolygon, generators, voronoi, options) {
     return centroidalVoronoi.calculate(boundPolygon, generators, voronoi, options)
 }
 
-export function weightedMax(boundPolygon, generators) {
-    return weightedVoronoi.calculate(boundPolygon, generators, (d, w1, w2) => d / Math.max(w1, w2))
+export function maxAdjustedPowerWeighted(boundPolygon, generators) {
+    return adjustedPowerWeightedVoronoi.calculate(boundPolygon, generators, (d, w1, w2) => d / Math.max(w1, w2))
 }
 
-export function weightedSum(boundPolygon, generators) {
-    return weightedVoronoi.calculate(boundPolygon, generators, (d, w1, w2) => d / (w1 + w2))
+export function sumAdjustedPowerWeighted(boundPolygon, generators) {
+    return adjustedPowerWeightedVoronoi.calculate(boundPolygon, generators, (d, w1, w2) => d / (w1 + w2))
 }
