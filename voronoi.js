@@ -4,15 +4,7 @@ import * as adjustedPowerWeightedVoronoi from "./adjusted-power-weighted-voronoi
 import * as centroidalVoronoi from "./centroidal-voronoi.js"
 
 export function voronoi(boundPolygon, generators) {
-    return incrementalVoronoi.calculate(boundPolygon, generators, middlePoint)
-}
-
-function middlePoint(p1, p2) {
-    const x1 = p1.x
-    const y1 = p1.y
-    const x2 = p2.x
-    const y2 = p2.y
-    return new Point((x1 + x2) / 2, (y1 + y2) / 2)
+    return incrementalVoronoi.calculate(boundPolygon, generators, d => d/2)
 }
 
 export function centroidal(boundPolygon, generators, voronoi, options) {

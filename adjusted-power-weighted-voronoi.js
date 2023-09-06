@@ -17,35 +17,7 @@ export function calculate(boundPolygon, generators, weightsAdjustmentFactor) {
     }
 
     const adjustedGenerators = adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor)
-    return incrementalVoronoi.calculate(boundPolygon, adjustedGenerators, middlePoint)
-}
-
-function middlePoint(g1, g2) {
-    const x1 = g1.x
-    const y1 = g1.y
-    const w1 = g1.weight
-    const x2 = g2.x
-    const y2 = g2.y
-    const w2 = g2.weight
-
-    const d = g1.distanceTo(g2)
-    const d1 = (d*d + w1*w1 - w2*w2) / (2*d)
-
-    if (x1 == x2) {
-        const x = x1
-        const y = y1 < y2 ? y1 + d1 : y1 - d1
-        return new Point(x, y)
-    }
-    if (y1 == y2) {
-        const x = x1 < x2 ? x1 + d1 : x1 - d1
-        const y = y1
-        return new Point(x, y)
-    }
-    const dx = x2 - x1
-    const dy = y2 - y1
-    const x = (d1 * dx / d) + x1
-    const y = (d1 * dy / d) + y1
-    return new Point(x, y)
+    return incrementalVoronoi.calculate(boundPolygon, adjustedGenerators, (d, w1, w2) => (d*d + w1*w1 - w2*w2) / (2*d))
 }
 
 function adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor) {
