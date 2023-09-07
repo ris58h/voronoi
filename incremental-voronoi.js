@@ -1,6 +1,6 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 
-export function calculate(boundPolygon, generators, d1Function) {
+export default function(boundPolygon, generators, d1Function) {
     const length = generators.length
     if (length == 0) {
         return []

@@ -1,6 +1,6 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 
-export function calculate(boundPolygon, generators, voronoi, weightAdjustmentFactorFunction) {
+export default function(boundPolygon, generators, voronoi, weightAdjustmentFactorFunction) {
     const length = generators.length
     if (length == 0) {
         return []
