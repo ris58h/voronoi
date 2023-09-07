@@ -1,5 +1,5 @@
 import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
-import * as incrementalVoronoi from "./incremental-voronoi.js"
+import * as powerWeightedVoronoi from "./power-weighted-voronoi.js"
 
 // The result is different from Power Diagram!
 // It's like a power diagram and uses the same distance,
@@ -17,7 +17,7 @@ export function calculate(boundPolygon, generators, weightsAdjustmentFactor) {
     }
 
     const adjustedGenerators = adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor)
-    return incrementalVoronoi.calculate(boundPolygon, adjustedGenerators, (d, w1, w2) => (d*d + w1*w1 - w2*w2) / (2*d))
+    return powerWeightedVoronoi.calculate(boundPolygon, adjustedGenerators)
 }
 
 function adjustWeightsWithRespectToDistances(generators, weightsAdjustmentFactor) {
