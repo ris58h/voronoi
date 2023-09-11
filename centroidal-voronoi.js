@@ -1,4 +1,4 @@
-import {Generator, Line, Point, Polygon} from "./core.js"
+import {Generator} from "./core.js"
 
 export default function(boundPolygon, generators, voronoi, options) {
     const eps = options?.eps ?? 0.1

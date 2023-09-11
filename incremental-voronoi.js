@@ -1,4 +1,4 @@
-import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
+import {Line, Point, Polygon, onOppositeSides} from "./core.js"
 
 export default function(boundPolygon, generators, d1Function) {
     const length = generators.length

@@ -1,4 +1,3 @@
-import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
 import incrementalVoronoi from "./incremental-voronoi.js"
 import adjustedWeightedVoronoi from "./adjusted-weighted-voronoi.js"
 import centroidalVoronoi from "./centroidal-voronoi.js"

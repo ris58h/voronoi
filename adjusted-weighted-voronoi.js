@@ -1,4 +1,4 @@
-import {Generator, Line, Point, Polygon, onOppositeSides} from "./core.js"
+import {Generator} from "./core.js"
 
 export default function(boundPolygon, generators, voronoi, weightAdjustmentFactorFunction) {
     const length = generators.length
